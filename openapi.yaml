@@ -1,0 +1,213 @@
+openapi: 3.0.0
+info:
+  title: MensaUnisa API
+  description: A simple API to access data for Zekromaster's MensaUnisa API.
+  version: 0.0.1
+paths:
+  /menus:
+    get:
+      summary: Returns a list of all menus, ordered by id, potentially filtered by date and meal.
+      parameters:
+        - name: date
+          description: The date to filter for
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: meal
+          description: The meal to filter for
+          in: query
+          schema:
+            type: string
+            enum: ["lunch", "dinner"]
+      responses:
+        '200':
+          description: A JSON array of menus
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/menuForList'
+        '400':
+          description: A 400 response in case there are errors in the request parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: A 500 error in case of server-side errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+                
+  /menus/{id}:
+    get:
+      summary: Returns the menu with the specified id.
+      parameters:
+        - name: id
+          description: The id of the menu to fetch
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: The menu with the specified id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/menu'
+        '404':
+          description: A 404 response because the menu doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: A 500 error in case of server-side errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+                
+    put:
+      summary: Inserts the menu with the specified id, or replaces it.
+      parameters:
+        - name: id
+          description: The id of the menu to insert
+          in: path
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/menuForInsert'
+      responses:
+        '201':
+          description: The inserted menu, if it was inserted in a new place
+          content:
+            application/json:
+              schema:
+                properties:
+                  to:
+                    allOf:
+                      - $ref: '#/components/schemas/menu'
+              
+        '200':
+          description: The old and the new menu, if a menu was replaced
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  from:
+                    description: The menu that was replaced
+                    allOf: 
+                      - $ref: '#/components/schemas/menu'
+                  to:
+                    description: The menu that was inserted
+                    allOf:
+                      - $ref: '#/components/schemas/menu'
+                required: ["from", "to"]
+        '400':
+          description: A 400 error in case of errors in the request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: A 500 error in case of server-side errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      
+components:
+  schemas:
+    menuForList:
+      description: A menu
+      type: object
+      properties:
+        id:
+          type: integer
+          description: A unique id identifying the menu 
+        date:
+          type: string
+          format: date
+          description: The day the menu refers to
+        meal:
+          type: string
+          enum: ["lunch", "dinner"]
+          description: The meal the menu refers to
+      required: ["id", "date", "meal"]
+    menu:
+      description: A menu
+      allOf:
+        - $ref: '#/components/schemas/menuForList'
+      properties:
+        dishes:
+          description: The dishes in the menu
+          type: array
+          items:
+            $ref: '#/components/schemas/dish'
+        files:
+          description: The files for the menu
+          type: array
+          items:
+            $ref: '#/components/schemas/file'
+      required: ["dishes", "files"]
+    menuForInsert:
+      description: The data required to insert a menu
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: The day the menu refers to
+        meal:
+          type: string
+          enum: ["lunch", "dinner"]
+          description: The meal the menu refers to
+        dishes:
+          description: The dishes in the menu
+          type: array
+          items:
+            $ref: '#/components/schemas/dish'
+        files:
+          description: The files for the menu
+          type: array
+          items:
+            $ref: '#/components/schemas/file'
+      required: ["date", "meal", "dishes"]
+    dish:
+      description: A dish in a menu
+      type: object
+      properties:
+        serving:
+          description: The serving of the dish
+          type: string
+          enum: ["primo", "secondo", "contorno", "takeaway"]
+        content:
+          description: What's in the dish
+          type: string
+      required: ["serving", "content"]
+    file:
+      description: A file
+      type: object
+      properties:
+        url:
+          type: string
+        format:
+          type: string
+          enum: ["pdf", "png"]
+      required: ["url", "format"]
+    error:
+      description: An error
+      properties:
+        description:
+          type: string

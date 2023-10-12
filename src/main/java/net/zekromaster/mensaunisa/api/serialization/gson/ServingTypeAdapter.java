@@ -3,14 +3,10 @@ package net.zekromaster.mensaunisa.api.serialization.gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
+import java.io.IOException;
 import net.zekromaster.mensaunisa.api.domain.ServingType;
 import net.zekromaster.mensaunisa.api.serialization.common.ServingTypeSerialization;
 
-import java.io.IOException;
-
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 final class ServingTypeAdapter extends TypeAdapter<ServingType> {
 
     @Override

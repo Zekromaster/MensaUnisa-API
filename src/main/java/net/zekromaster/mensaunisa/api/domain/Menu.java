@@ -10,6 +10,7 @@ public record Menu (
   Set<Serving> servings
 ) {
 
+  @SuppressWarnings("unused")
   public Menu(Meal time, Traversable<Serving> servings) {
     this(time, HashSet.ofAll(servings));
   }

@@ -3,9 +3,6 @@ package net.zekromaster.mensaunisa.api.controller;
 import io.javalin.http.Context;
 import io.javalin.http.InternalServerErrorResponse;
 import io.javalin.http.NotFoundResponse;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import net.zekromaster.mensaunisa.api.database.Database;
 import net.zekromaster.mensaunisa.api.domain.Meal;
 import net.zekromaster.mensaunisa.api.domain.MealTime;
@@ -14,11 +11,13 @@ import net.zekromaster.mensaunisa.api.domain.Menu;
 import java.time.LocalDate;
 import java.util.function.Supplier;
 
-@AllArgsConstructor
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public final class DatabaseRestHandlers implements RestHandlers {
 
-    Database database;
+    private final Database database;
+
+    public DatabaseRestHandlers(Database database) {
+        this.database = database;
+    }
 
     @Override
     public void getAll(Context ctx) {

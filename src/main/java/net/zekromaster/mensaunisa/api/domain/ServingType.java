@@ -1,15 +1,5 @@
 package net.zekromaster.mensaunisa.api.domain;
 
-import io.vavr.control.Try;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.experimental.FieldDefaults;
-import org.apache.commons.lang3.math.NumberUtils;
-
-@AllArgsConstructor
-@Getter
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public enum ServingType {
     FIRST(1, "first"),
     SECOND(2, "second"),
@@ -19,5 +9,19 @@ public enum ServingType {
 
     private final int code;
     private final String toString;
+
+    ServingType(int code, String toString) {
+        this.code = code;
+        this.toString = toString;
+    }
+
+    public int code() {
+        return code;
+    }
+
+    @Override
+    public String toString() {
+        return toString;
+    }
 
 }

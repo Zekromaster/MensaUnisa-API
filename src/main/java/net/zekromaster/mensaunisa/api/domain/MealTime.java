@@ -1,16 +1,23 @@
 package net.zekromaster.mensaunisa.api.domain;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.experimental.FieldDefaults;
 
-@Getter
-@AllArgsConstructor
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public enum MealTime {
     LUNCH(0, "lunch"),
     DINNER(1, "dinner");
 
-    int code;
-    String toString;
+    private final int code;
+    private final String toString;
+
+    MealTime(int code, String toString) {
+        this.code = code;
+        this.toString = toString;
+    }
+
+    public int code() {
+        return code;
+    }
+
+    @Override
+    public String toString() {
+        return toString;
+    }
 }

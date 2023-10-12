@@ -1,7 +1,7 @@
 package net.zekromaster.mensaunisa.api;
 
 import io.javalin.Javalin;
-import io.vavr.collection.List;
+import io.vavr.collection.HashSet;
 import net.zekromaster.mensaunisa.api.controller.DatabaseRestHandlers;
 import net.zekromaster.mensaunisa.api.database.StubDatabase;
 import net.zekromaster.mensaunisa.api.domain.*;
@@ -13,7 +13,17 @@ import java.time.LocalDate;
 public class MensaUnisaAPI {
 
   public static void main(String[] args) {
-    var database = new StubDatabase();
+    var database = new StubDatabase(
+        new Menu(
+            new Meal(
+                LocalDate.of(2020, 1, 1),
+                MealTime.LUNCH
+            ),
+            HashSet.of(
+                new Serving(ServingType.FIRST, "Pasta al pomodoro")
+            )
+        )
+    );
 
     var controller = new DatabaseRestHandlers(database);
 
@@ -23,12 +33,7 @@ public class MensaUnisaAPI {
 
     ValidatorRegisterer.DEFAULT.registerValidators();
 
-    app
-        .get("/meals", controller::getAll)
-        .get("/meals/{day}", controller::getByDay)
-        .get("/meals/{day}/{time}", controller::getByTime)
-        .post("/meals", controller::insert)
-        .start(7000);
+    controller.register(app).start(7000);
   }
 
 }

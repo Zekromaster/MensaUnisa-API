@@ -1,6 +1,5 @@
 plugins {
     id("java")
-    id("io.freefair.lombok") version "8.3"
 }
 
 group = "net.zekromaster.mensaunisa.api"

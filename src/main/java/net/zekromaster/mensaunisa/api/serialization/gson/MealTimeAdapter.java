@@ -3,16 +3,10 @@ package net.zekromaster.mensaunisa.api.serialization.gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.experimental.FieldDefaults;
+import java.io.IOException;
 import net.zekromaster.mensaunisa.api.domain.MealTime;
 import net.zekromaster.mensaunisa.api.serialization.common.MealTimeSerialization;
 
-import java.io.IOException;
-
-@AllArgsConstructor
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 final class MealTimeAdapter extends TypeAdapter<MealTime> {
 
     @Override

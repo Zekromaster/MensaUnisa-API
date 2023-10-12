@@ -1,23 +1,21 @@
 package net.zekromaster.mensaunisa.api.serialization.common;
 
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
-import lombok.experimental.UtilityClass;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-@UtilityClass
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class LocalDateSerialization {
+public final class LocalDateSerialization {
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+    private LocalDateSerialization() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 
-    public String toString(java.time.LocalDate localDate) {
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+    public static String toString(LocalDate localDate) {
         return localDate.format(formatter);
     }
 
-    public LocalDate fromString(String string) {
+    public static LocalDate fromString(String string) {
         return LocalDate.parse(string, formatter);
     }
 
